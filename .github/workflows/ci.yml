@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: datadiffer_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATADIFFER_TEST_PG: postgresql://postgres:postgres@localhost:5432/datadiffer_test
+      DATADIFFER_TEST_SNOWFLAKE_ACCOUNT: ${{ secrets.DATADIFFER_TEST_SNOWFLAKE_ACCOUNT }}
+      DATADIFFER_TEST_SNOWFLAKE_USER: ${{ secrets.DATADIFFER_TEST_SNOWFLAKE_USER }}
+      DATADIFFER_TEST_SNOWFLAKE_WAREHOUSE: ${{ secrets.DATADIFFER_TEST_SNOWFLAKE_WAREHOUSE }}
+      DATADIFFER_TEST_SNOWFLAKE_DATABASE: ${{ secrets.DATADIFFER_TEST_SNOWFLAKE_DATABASE }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Snowflake test key
+        env:
+          SF_KEY: ${{ secrets.DATADIFFER_TEST_SNOWFLAKE_PRIVATE_KEY }}
+        run: |
+          if [ -n "$SF_KEY" ]; then
+            printf '%s\n' "$SF_KEY" > "$RUNNER_TEMP/sf_key.p8"
+            chmod 600 "$RUNNER_TEMP/sf_key.p8"
+            echo "DATADIFFER_TEST_SNOWFLAKE_KEY=$RUNNER_TEMP/sf_key.p8" >> "$GITHUB_ENV"
+          fi
+      - name: Lint
+        run: uv run --python ${{ matrix.python-version }} --group dev ruff check .
+      - name: Test
+        run: uv run --python ${{ matrix.python-version }} --group dev pytest -q

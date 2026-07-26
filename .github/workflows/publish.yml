@@ -1,0 +1,26 @@
+name: publish
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  pypi:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # PyPI trusted publishing — no long-lived token
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Tag must match package version
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG=$(uv run --no-project --with tomli python -c \
+            "import tomli;print(tomli.load(open('pyproject.toml','rb'))['project']['version'])")
+          echo "tag=$TAG package=$PKG"
+          [ "$TAG" = "$PKG" ] || { echo "::error::tag $TAG != version $PKG"; exit 1; }
+      - name: Build
+        run: uv build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
