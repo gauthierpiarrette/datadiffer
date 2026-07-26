@@ -1,0 +1,82 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "datadiffer"
+version = "0.1.0"
+description = "Diff two tables and see what changed and which slice of your data it is concentrated in. A maintained successor to data-diff."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "Gauthier Piarrette" }]
+keywords = [
+  "data-diff",
+  "table diff",
+  "data quality",
+  "regression testing",
+  "snowflake",
+  "postgres",
+  "duckdb",
+  "mcp",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Database",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+  "duckdb>=1.5,<2",
+  "pyarrow>=17",
+  "sqlglot>=30.13,<32",
+  "click>=8",
+  "rich>=13",
+  "tomli>=2; python_version < '3.11'",  # tomllib backport; stdlib from 3.11
+]
+
+[project.optional-dependencies]
+snowflake = ["snowflake-connector-python[pandas]>=4.7,<5"]  # [pandas] carries the Arrow fetch path
+postgres = ["psycopg[binary]>=3.2,<4"]
+mcp = ["fastmcp>=3.4,<4"]
+all = ["datadiffer[snowflake,postgres,mcp]"]
+
+[project.scripts]
+datadiffer = "datadiffer.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/gauthierpiarrette/datadiffer"
+Repository = "https://github.com/gauthierpiarrette/datadiffer"
+Issues = "https://github.com/gauthierpiarrette/datadiffer/issues"
+
+[dependency-groups]
+dev = [
+  "pytest>=8",
+  "ruff>=0.6",
+  "mypy>=1.10",
+  "fastmcp>=3.4,<4",  # so CI exercises the MCP server build
+]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md", "LICENSE", "CHANGELOG.md", "pyproject.toml"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+python_version = "3.10"
+packages = ["datadiffer.core", "datadiffer.report"]
+ignore_missing_imports = true
