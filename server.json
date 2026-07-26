@@ -1,0 +1,27 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.gauthierpiarrette/datadiffer",
+  "title": "datadiffer",
+  "description": "Read-only semantic data diff across Snowflake, Postgres, and DuckDB — with segment attribution (which slice of the data changed).",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/gauthierpiarrette/datadiffer",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "datadiffer",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" },
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "DATADIFFER_CONFIG",
+          "description": "Path to datadiffer.toml holding named connections (run `datadiffer init` to scaffold one). Credentials never pass through tool arguments.",
+          "isRequired": false
+        }
+      ]
+    }
+  ]
+}
