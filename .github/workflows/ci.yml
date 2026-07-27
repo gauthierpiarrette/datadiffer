@@ -46,6 +46,6 @@ jobs:
             echo "DATADIFFER_TEST_SNOWFLAKE_KEY=$RUNNER_TEMP/sf_key.p8" >> "$GITHUB_ENV"
           fi
       - name: Lint
-        run: uv run --python ${{ matrix.python-version }} --group dev ruff check .
+        run: uv run --python ${{ matrix.python-version }} --all-extras --group dev ruff check .
       - name: Test
-        run: uv run --python ${{ matrix.python-version }} --group dev pytest -q
+        run: uv run --python ${{ matrix.python-version }} --all-extras --group dev pytest -q
