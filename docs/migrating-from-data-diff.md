@@ -3,7 +3,7 @@
 [data-diff](https://github.com/datafold/data-diff) was archived in May 2024.
 [reladiff](https://github.com/erezsh/reladiff), Erez Shinan's fork, last
 released in March 2025. If you're still installing either in CI, this page
-gets you across — or tells you plainly to stay.
+gets you across, or tells you plainly to stay.
 
 ## Should you switch?
 
@@ -40,14 +40,14 @@ datadiffer diff orders orders_v2 --source "postgresql://u@h/db" --key order_id
 | `-l`, `--limit` | `--sample-limit` | samples shown per status |
 | `--json` | `--format json` | stable [schema v1](../src/datadiffer/report/json_schema.py) |
 | `-t`, `--update-column` | `--where "updated_at < now() - interval '1 hour'"` | see replication lag below |
-| `--bisection-factor`, `--bisection-threshold` | — | no hashdiff in v0.1 |
-| `-d`, `--debug` | — | errors are explicit; open an issue if one is unclear |
+| `--bisection-factor`, `--bisection-threshold` | n/a | no hashdiff in v0.1 |
+| `-d`, `--debug` | n/a | errors are explicit; open an issue if one is unclear |
 
 ## Behavior differences worth knowing
 
 **Keys are inferred.** Omit `--key` and datadiffer uses declared PRIMARY KEY /
 UNIQUE constraints first, then conventional names (`id`, `<table>_id`, `*_id`,
-`*_key`) — verifying non-null and unique on *both* sides, under your `--where`
+`*_key`), verifying non-null and unique on *both* sides, under your `--where`
 filter. It refuses rather than guessing when nothing qualifies.
 
 **Exit codes are a contract.** `0` no differences, `1` differences found,
@@ -59,7 +59,7 @@ gate, silently comparing nothing and reporting success is the worst outcome
 available.
 
 **Reports are machine-readable and frozen.** `--format json` emits schema v1,
-which is contract-tested — the same payload the MCP server and the GitHub
+which is contract-tested. It is the same payload the MCP server and the GitHub
 Action produce. Changes within v1 are additive only.
 
 ## Replication lag

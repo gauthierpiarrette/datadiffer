@@ -1,4 +1,4 @@
-"""Report JSON schema v1 — FROZEN.
+"""Report JSON schema v1, FROZEN.
 
 This is the stable contract shared by CLI ``--format json``, MCP
 ``structuredContent``, and the GitHub Action artifact. Within v1, changes are

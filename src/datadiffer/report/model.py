@@ -1,4 +1,4 @@
-"""DiffReport data model — JSON schema v1, frozen.
+"""DiffReport data model. JSON schema v1, frozen.
 
 Additive changes only within v1: never rename, remove, or retype anything in
 report/json_schema.py's REPORT_V1. This is the shared contract for CLI JSON,

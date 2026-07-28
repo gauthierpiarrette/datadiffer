@@ -2,7 +2,7 @@
 
 # datadiffer
 
-**Diff two tables — see what changed, and which slice of your data it's concentrated in.**
+**Diff two tables. See what changed, and which slice of your data it's concentrated in.**
 
 ```
 98.6% of modified rows have country = 'DE' (8.9× over-represented)
@@ -13,8 +13,8 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://pypi.org/project/datadiffer/)
 
-`datadiffer` compares two tables — dev vs. prod, PR vs. main, source vs.
-destination — and tells you **what changed and where it's concentrated**: rows
+`datadiffer` compares two tables (dev vs. prod, PR vs. main, source vs.
+destination) and tells you **what changed and where it's concentrated**: rows
 added / removed / modified, per-column change rates, and segment attribution.
 
 Built for the era when agents write your pipelines and someone has to check
@@ -23,7 +23,7 @@ their work. A maintained, MIT-licensed successor to the archived
 
 ## Try it in 60 seconds
 
-No credentials, no config, no account — it generates its own data:
+No credentials, no config, no account. It generates its own data:
 
 ```bash
 uvx datadiffer demo
@@ -52,7 +52,7 @@ DIFF FOUND
 ```
 
 That last block is the point. A diff tells you 432 rows changed; datadiffer
-tells you they're almost all German orders — which is the difference between
+tells you they're almost all German orders, which is the difference between
 "something moved" and "the VAT change landed."
 
 ## Install
@@ -97,7 +97,7 @@ Useful flags: `--key` (inferred when omitted), `--where`, `--columns` /
 [datadiffer-action](https://github.com/gauthierpiarrette/datadiffer-action)
 posts the report as a sticky PR comment:
 
-> ### datadiffer: `ANALYTICS.ORDERS` vs `ANALYTICS_PR_482.ORDERS` — differences found ❌
+> ### datadiffer: `ANALYTICS.ORDERS` vs `ANALYTICS_PR_482.ORDERS`: differences found ❌
 >
 > **+800 added · −250 removed · ~432 modified · 49,318 unchanged** (2.96% of base rows affected)
 > Policy: max-changed-rows-pct exceeded: 2.96% > 0.5%
@@ -135,12 +135,12 @@ datadiffer init          # scaffold datadiffer.toml, then add the server to your
 { "mcpServers": { "datadiffer": { "command": "datadiffer", "args": ["mcp"] } } }
 ```
 
-Any MCP client works — `datadiffer init` prints the server entry to paste,
+Any MCP client works. `datadiffer init` prints the server entry to paste,
 including a `uvx` form for clients that prefer no global install.
 
 Four read-only tools: `list_connections`, `schema_diff`, `diff_summary`
 (cheap preflight), `diff_tables` (full report). **Credentials never pass
-through the model** — tools take connection *names* from your local
+through the model.** Tools take connection *names* from your local
 `datadiffer.toml`, never DSNs. Over-cap requests come back as structured
 refusals with a remedy, so the agent can self-correct instead of failing.
 
@@ -159,7 +159,7 @@ change is concentrated in.
 | [datacompy](https://github.com/capitalone/datacompy) | You're comparing two pandas/Spark/Polars DataFrames inside one process. |
 
 datadiffer is for the case in between: one command, no platform, works from
-your terminal, your CI, or your agent — and it explains itself.
+your terminal, your CI, or your agent, and it explains itself.
 
 ## Migrating from data-diff / reladiff
 
@@ -180,8 +180,8 @@ an **error**, never silently ignored; and exit code 1 means "diff found"
 (2 is reserved for operational errors), so CI can tell them apart.
 
 **Not yet ported:** checksum-bisection hashdiff for very large cross-database
-diffs — reladiff's headline capability — plus MySQL, Oracle, ClickHouse, Trino
-and the rest of its connector list. If you need those today, use
+diffs, which is reladiff's headline capability, plus MySQL, Oracle,
+ClickHouse, Trino and the rest of its connector list. If you need those today, use
 [reladiff](https://github.com/erezsh/reladiff); the bisection port is the top
 item on our v0.2 roadmap and will credit its author.
 
@@ -193,12 +193,12 @@ Full command mapping and behavior differences:
 - **Warehouses:** Snowflake, Postgres, DuckDB, Parquet, CSV. BigQuery is next (v0.1.1).
 - **Every diff runs in local DuckDB.** Postgres is attached read-only and
   scanned in place; Snowflake is pulled once over Arrow with only the needed
-  columns. Both are capped at 50M rows and 10 GiB per side — narrow with
-  `--where`. Pushing the comparison into the warehouse, and lifting that cap
+  columns. Both are capped at 50M rows and 10 GiB per side, so narrow the
+  comparison with `--where`. Pushing the comparison into the warehouse, and lifting that cap
   with checksum bisection, are the next two pieces of work.
 - Postgres reads are unsnapshotted (the report says so in `execution.snapshot`);
   Snowflake pulls are a single consistent SELECT.
-- Segment attribution is single-column, categorical, and descriptive —
+- Segment attribution is single-column, categorical, and descriptive. It says
   "over-represented", never causal.
 
 ## Project
@@ -212,8 +212,8 @@ sqlglot, click, rich.
 
 BigQuery, then checksum-bisection hashdiff so large cross-database diffs stop
 needing a row cap (ported with credit to reladiff), then more connectors.
-Tracked in [issues](https://github.com/gauthierpiarrette/datadiffer/issues) —
-comment on the one you need and it moves up.
+Tracked in [issues](https://github.com/gauthierpiarrette/datadiffer/issues).
+Comment on the one you need and it moves up.
 
 ## Contributing
 

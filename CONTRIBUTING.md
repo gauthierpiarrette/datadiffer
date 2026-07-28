@@ -18,12 +18,12 @@ runs Postgres on every push; Snowflake on `main`.
 
 ## What the tests protect
 
-- **`tests/test_contract.py`** — the frozen report schema v1 and the MCP tool
+- **`tests/test_contract.py`** covers the frozen report schema v1 and the MCP tool
   surface. If you break these, CI pipelines and agents downstream break too.
   Changes within v1 are additive only.
-- **`tests/test_regressions_*.py`** — one case per defect that shipped once.
+- **`tests/test_regressions_*.py`** holds one case per defect that shipped once.
   They look arbitrary in isolation; each is load-bearing. Don't delete them.
-- **`tests/test_where_fuzz.py`** — the `--where` gate. Every named bypass class
+- **`tests/test_where_fuzz.py`** covers the `--where` gate. Every named bypass class
   has a case; new gate behavior needs a new case.
 
 ## Standards

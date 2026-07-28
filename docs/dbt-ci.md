@@ -1,6 +1,6 @@
 # Diffing dbt models in CI
 
-datadiffer isn't a dbt tool — it doesn't read your manifest or care about your
+datadiffer isn't a dbt tool. It doesn't read your manifest or care about your
 project. But dbt already tells you which models a PR changed, and most dbt CI
 setups already build them into a per-PR schema. That's everything needed to
 diff each changed model against production automatically.
@@ -45,7 +45,7 @@ jobs:
       - name: Fetch production manifest
         run: |
           mkdir -p prod-artifacts
-          # however you publish it — S3, GH artifact, dbt Cloud API:
+          # however you publish it: S3, GH artifact, dbt Cloud API
           aws s3 cp s3://my-bucket/dbt/manifest.json prod-artifacts/manifest.json
 
       - name: Build changed models into the PR schema
@@ -99,7 +99,7 @@ Three things make this work:
 
 ## The read-only role
 
-datadiffer only ever runs `SELECT` — no temp tables, no writes — so the role
+datadiffer only ever runs `SELECT`, with no temp tables and no writes, so the role
 needs nothing else:
 
 ```sql
@@ -147,7 +147,7 @@ if it's working for you there's no reason to move. The differences:
 - audit_helper tells you which rows differ; datadiffer additionally tells you
   *where the change is concentrated* ("98% of modified rows are `country =
   'DE'`"), which is usually the thing you actually wanted to know.
-- audit_helper is dbt-native — it knows your project. datadiffer doesn't, which
+- audit_helper is dbt-native and knows your project. datadiffer doesn't, which
   is why this page exists.
 
 Use both if you like: audit_helper for ad-hoc investigation in your IDE,

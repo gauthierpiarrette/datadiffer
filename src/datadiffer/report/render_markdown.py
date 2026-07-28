@@ -51,7 +51,7 @@ def _render(report, header, reproduce, policy_note, columns_cap, samples_cap, ma
     if marker:
         out.append(f"<!-- datadiffer-report:{header} -->")
     out.append(
-        f"### datadiffer: `{report.tables['a']}` vs `{report.tables['b']}` — {verdict}"
+        f"### datadiffer: `{report.tables['a']}` vs `{report.tables['b']}`: {verdict}"
     )
     out.append("")
     out.append(
@@ -71,7 +71,7 @@ def _render(report, header, reproduce, policy_note, columns_cap, samples_cap, ma
         out.append("| Column | Changed rows | % of matched |")
         out.append("|---|---:|---:|")
         for c in changed_cols[:columns_cap]:
-            rate = f"{c.change_rate:.2%}" if c.change_rate is not None else "—"
+            rate = f"{c.change_rate:.2%}" if c.change_rate is not None else "n/a"
             suffix = " (json)" if c.compared_as == "json_text" else ""
             out.append(f"| `{c.name}`{suffix} | {c.changed_rows:,} | {rate} |")
         if len(changed_cols) > columns_cap:

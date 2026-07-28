@@ -1,7 +1,7 @@
 """Terminal renderer (rich). Degrades to plain text on non-TTY; honors NO_COLOR.
 
 User-controlled strings (paths, column names, values) are always escaped or
-printed with markup disabled — bracketed text must render literally.
+printed with markup disabled, so bracketed text renders literally.
 """
 
 from __future__ import annotations
