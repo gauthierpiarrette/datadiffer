@@ -30,7 +30,7 @@ def test_demo_generates_planted_regressions(tmp_path):
         WHERE a.amount IS DISTINCT FROM b.amount
     """).fetchone()
     con.close()
-    assert de_share > 0.98  # 426/432 = 98.6% — the attribution headline number
+    assert de_share > 0.98  # 426/432 = 98.6%, the attribution headline number
 
     # The NULL-plan story on added rows.
     con = duckdb.connect()

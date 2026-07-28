@@ -1,12 +1,12 @@
-"""`datadiffer ci` — the GitHub Action entry point.
+"""`datadiffer ci`, the GitHub Action entry point.
 
 Runs one single-table diff, writes report.json / comment.md / summary.md /
 GITHUB_OUTPUT entries, and returns the policy exit code (0 within policy,
 1 over policy, 2 operational). The Action's shell layer never parses our
-output — everything it needs lands in files and step outputs.
+output; everything it needs lands in files and step outputs.
 
-Interpolation contract: a CLOSED set of variables — ${PR_NUMBER}, ${BRANCH},
-${SHA_SHORT} — is substituted into table refs and schema-map from the
+Interpolation contract: a CLOSED set of variables (${PR_NUMBER}, ${BRANCH},
+${SHA_SHORT}) is substituted into table refs and schema-map from the
 environment; ${OTHER_VARS} in --source/--target resolve from the environment
 too (secrets ride env, never argv).
 """
@@ -117,7 +117,7 @@ def _interp_ref(value: str) -> str:
         name = m.group(1)
         if name not in _REF_VARS:
             raise DatadifferError(
-                f"Unknown variable ${{{name}}} in table reference — "
+                f"Unknown variable ${{{name}}} in table reference, "
                 f"allowed: {', '.join('${' + v + '}' for v in _REF_VARS)}"
             )
         if name not in os.environ:
@@ -130,7 +130,7 @@ def _interp_ref(value: str) -> str:
 
 
 def _interp_env(value: str | None) -> str | None:
-    """Open interpolation for connection URIs — secrets ride env, not argv."""
+    """Open interpolation for connection URIs; secrets ride env, not argv."""
     if value is None:
         return None
     missing: list[str] = []
@@ -158,7 +158,7 @@ def _apply_schema_map(table_ref: str, schema_map: str) -> str:
         left, sep, right = pair.strip().partition("=")
         if not sep or not left or not right:
             raise DatadifferError(
-                f"Bad schema-map entry {pair.strip()!r} — use OLD_SCHEMA=NEW_SCHEMA"
+                f"Bad schema-map entry {pair.strip()!r}, use OLD_SCHEMA=NEW_SCHEMA"
             )
         rules[left.lower()] = right
     # Split off any locator prefix first: conn::<ref> or file.duckdb:<ref>

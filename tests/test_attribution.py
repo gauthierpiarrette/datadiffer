@@ -57,7 +57,7 @@ def test_added_rows_null_segment(tmp_path):
 
 def test_removed_segment_scored_against_source(tmp_path):
     """A segment entirely removed must score against the SOURCE
-    baseline — finite lift, never silently dropped."""
+    baseline: finite lift, never silently dropped."""
     a = _write(tmp_path, "a.parquet", """
         SELECT range AS id, CASE WHEN range < 3000 THEN 'X' ELSE 'Y' END AS seg,
                range * 1.0 AS v
@@ -83,7 +83,7 @@ def test_uniform_removal_yields_no_segment(tmp_path):
     b = _write(tmp_path, "b.parquet", """
         SELECT range AS id, CASE WHEN range % 2 = 0 THEN 'X' ELSE 'Y' END AS seg,
                range * 1.0 AS v FROM range(4000)
-        WHERE range % 10 NOT IN (3, 4)""")  # removes 400 X + 400 Y — truly uniform
+        WHERE range % 10 NOT IN (3, 4)""")  # removes 400 X + 400 Y, truly uniform
     report = datadiffer.diff(a, b)
     sa = report.attribution.by_status["removed"]
     assert sa.segments == []

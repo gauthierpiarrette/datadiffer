@@ -8,7 +8,7 @@ def fixture_pair(tmp_path):
 
     Base: 1000 rows (order_id 0..999). Target: removes ids 0-4 (5 removed),
     adds ids 1000-1011 (12 added), modifies amount for ids 10-29 (20 modified).
-    `status` and `country` never change — the per-column zero assertion.
+    `status` and `country` never change, which the per-column zero assertion relies on.
     """
     a = tmp_path / "prod.parquet"
     b = tmp_path / "dev.parquet"

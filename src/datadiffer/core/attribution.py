@@ -4,7 +4,7 @@ Single execution path over the local join temp table. Scoring: support
 (share of the status's rows), lift vs a STATUS-RELATIVE baseline, ranked by
 Adtributor's bounded JS-surprise. Baselines: added/modified score against the
 side-B population, removed against side-A, any_change against the exact union
-(side-B rows + removed side-A rows) — every status's baseline is a superset of
+(side-B rows + removed side-A rows), so every status's baseline is a superset of
 its own rows, so lift stays finite. Dimension values are selected by ROW
 PRESENCE (a value that changed to NULL attributes to NULL). Output language is
 "over-represented", never causal.
@@ -161,7 +161,7 @@ def _detect_candidates(ex, jt, compare, schema_a, schema_b, keys, p):
 
 def _score(ex, jt, analyzed, totals, p) -> dict[str, list[Segment]]:
     """One melted aggregation over the join table; scoring math in Python
-    (statuses have different denominators — clearer here than nested SQL)."""
+    (statuses have different denominators, clearer here than nested SQL)."""
 
     def dim(i: int, side_case: str) -> str:
         # Escape real values equal to the sentinel so a literal '__dd_null__'

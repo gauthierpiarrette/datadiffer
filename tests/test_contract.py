@@ -1,6 +1,6 @@
 """Contract-freeze tests. If any of these fail, you are breaking the
 frozen v1 contract that CLI JSON, MCP structuredContent, and the Action
-artifact all share — stop and think, don't update the snapshot casually."""
+artifact all share. Stop and think, don't update the snapshot casually."""
 
 import json
 

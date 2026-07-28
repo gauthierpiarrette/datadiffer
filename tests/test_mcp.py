@@ -1,4 +1,4 @@
-"""MCP tool contract tests — impl functions directly; server build if fastmcp
+"""MCP tool contract tests: impl functions directly; server build if fastmcp
 is installed. Refusals must be structured results with a remedy, never
 exceptions (agents recover from typed errors)."""
 

@@ -2,7 +2,7 @@
 
 Precedence: declared PK/UNIQUE constraints (the only source of composite
 inference) -> user --key -> conventional-name candidates. Every key is checked
-non-null AND unique on both FILTERED sides — unique is not identifying, and a
+non-null AND unique on both FILTERED sides; unique alone is not identifying, and a
 key only needs to hold within the --where slice being diffed.
 """
 
@@ -101,7 +101,7 @@ def _check_key(
         if nulls:
             raise DatadifferError(
                 f"Key ({', '.join(keys)}) has NULLs on side {side}"
-                + (f" — {label} is not usable as a key" if label else "")
+                + (f" ({label} is not usable as a key)" if label else "")
             )
         probes["n"] += 1
         dupes = con.execute(

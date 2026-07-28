@@ -1,7 +1,7 @@
 """Local diff engine: both sides in one DuckDB connection.
 
 Explicit ON join with per-side presence markers (never USING). The CTEs project
-ONLY key + compared columns under internal ``_dd_*`` aliases — user column names
+ONLY key + compared columns under internal ``_dd_*`` aliases, so user column names
 never appear in the join output, so no name (``_p``, ``_added``, ...) can shadow
 an internal marker. The join result is materialized to a temp table in OUR
 scratch DuckDB (the no-materialization rule applies to user warehouses, not
@@ -183,7 +183,7 @@ def _align(
     """Fail-closed: only columns with a known comparison mode get a predicate.
 
     ``include`` (--columns) is applied first; ``exclude`` then subtracts.
-    Unknown names in either are an error — a typo must never silently pass CI.
+    Unknown names in either are an error: a typo must never silently pass CI.
     """
     common = [c for c in schema_a if c in schema_b]
     for k in keys:

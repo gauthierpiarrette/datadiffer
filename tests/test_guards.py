@@ -1,4 +1,4 @@
-"""Unit tests for guards and redaction — pg-free (monkeypatched estimates)."""
+"""Unit tests for guards and redaction, pg-free (monkeypatched estimates)."""
 
 import io
 

@@ -2,7 +2,7 @@
 
 Credentials never flow through the model: tool inputs accept CONNECTION NAMES
 from datadiffer.toml, never DSNs. Refusals are structured results with a
-remedy, not exceptions — agents recover better from typed errors. diff_tables
+remedy, not exceptions; agents recover better from typed errors. diff_tables
 runs the diff_summary preflight internally, so correct behavior never depends
 on the agent's call ordering.
 
@@ -177,7 +177,7 @@ def impl_diff_summary(
         key_info: dict = {}
         if any(isinstance(r, SnowflakeHandle) for r in (raw_a, raw_b)):
             # Preflight stays CHEAP: declared keys come from warehouse metadata;
-            # uniqueness probes would scan — they run inside diff_tables.
+            # uniqueness probes would scan; they run inside diff_tables.
             declared = api._shared_declared_keys(con, None, None, warnings, raw_a, raw_b)
             if keys:
                 key_info = {"columns": keys, "inferred": False, "rule": None, "usable": True}
@@ -223,7 +223,7 @@ def impl_diff_summary(
             "recommendation": (
                 "proceed with diff_tables" if within and key_info.get("usable")
                 else "resolve the key first (pass keys)" if not key_info.get("usable")
-                else "over caps — pass force_large to diff_tables or narrow with where"
+                else "over caps: pass force_large to diff_tables or narrow with where"
             ),
         }
     finally:
@@ -321,7 +321,7 @@ def build_server():
 
     @mcp.tool(**kw)
     def list_connections(probe: bool = False) -> dict:
-        """List configured warehouse connections (names only — credentials never
+        """List configured warehouse connections (names only; credentials never
         pass through tools). Cheap."""
         return impl_list_connections(probe)
 
@@ -360,7 +360,7 @@ def build_server():
         timeout_seconds: int | None = None,
         force_large: bool = False,
     ) -> dict:
-        """EXPENSIVE: full semantic diff — may scan both tables end to end.
+        """EXPENSIVE: full semantic diff, may scan both tables end to end.
         Returns rows added/removed/modified, per-column change rates, segment
         attribution, and samples. Runs the diff_summary preflight internally and
         refuses with a remedy if caps would be exceeded."""

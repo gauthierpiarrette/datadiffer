@@ -31,7 +31,7 @@ def open_source(con: duckdb.DuckDBPyConnection, locator: str, alias: str) -> Loc
         )
     if "::" in locator:
         raise DatadifferError(
-            f"Unexpected '::' in locator {locator!r} — conn::table locators are "
+            f"Unexpected '::' in locator {locator!r}: conn::table locators are "
             "resolved via datadiffer.toml (run `datadiffer connections list`)."
         )
 
@@ -54,7 +54,7 @@ def open_source(con: duckdb.DuckDBPyConnection, locator: str, alias: str) -> Loc
         parts = table.split(".")
         if len(parts) > 2 or not all(parts):
             raise DatadifferError(
-                f"Bad table reference {table!r} — use <table> or <schema>.<table> "
+                f"Bad table reference {table!r}, use <table> or <schema>.<table> "
                 "(a literal dot in a table name is not supported by this locator form)"
             )
         try:

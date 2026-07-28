@@ -12,7 +12,7 @@ from datadiffer.errors import DatadifferError
 
 
 def test_failed_connection_never_prints_password():
-    """Driver error text embeds the raw DSN — must be scrubbed."""
+    """Driver error text embeds the raw DSN, which must be scrubbed."""
     dsn = "postgresql://user:SUPERSECRET@localhost:1/db"
     ok, detail = probe_connection({"type": "postgres", "dsn": dsn})
     assert not ok
@@ -32,7 +32,7 @@ def test_redact_text_scrubs_embedded_dsn():
 
 
 def test_probe_handles_quote_in_dsn():
-    """Probe must quote like the real path — no parser error."""
+    """Probe must quote like the real path, with no parser error."""
     ok, detail = probe_connection(
         {"type": "postgres", "dsn": "postgresql://u:pa'ss@localhost:1/db"}
     )
@@ -42,7 +42,7 @@ def test_probe_handles_quote_in_dsn():
 
 
 def test_unset_env_var_fails_loudly_on_use(tmp_path, monkeypatch):
-    """${VAR} of an unset variable must never silently become '' —
+    """${VAR} of an unset variable must never silently become '', because
     and (lazy contract) it fails when the CONNECTION IS USED, not on load."""
     from datadiffer.config import connection
 

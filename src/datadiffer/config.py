@@ -1,4 +1,4 @@
-"""datadiffer.toml — the ONE config file shared by CLI, MCP server, and Action.
+"""datadiffer.toml, the ONE config file shared by CLI, MCP server, and Action.
 
 Discovery order (explicit wins): $DATADIFFER_CONFIG -> ./datadiffer.toml ->
 ~/.config/datadiffer/config.toml. ``${ENV_VAR}`` interpolation on string
@@ -22,7 +22,7 @@ from datadiffer.errors import DatadifferError
 _ENV_REF = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
 
 SCAFFOLD = """\
-# datadiffer configuration — used by the CLI (conn::table locators),
+# datadiffer configuration, used by the CLI (conn::table locators),
 # the MCP server, and the GitHub Action.
 # Secrets belong in environment variables, referenced as ${VAR_NAME}.
 
@@ -57,7 +57,7 @@ def config_path() -> Path | None:
 
 def load_config() -> tuple[dict, Path | None]:
     """Returns the RAW config (no env interpolation). Interpolation is lazy,
-    per connection — one unset ${VAR} on connection A must not brick verbs
+    per connection: one unset ${VAR} on connection A must not brick verbs
     that only touch connection B."""
     path = config_path()
     if path is None:
@@ -70,7 +70,7 @@ def load_config() -> tuple[dict, Path | None]:
 
 
 def interpolate_conn(conn: dict, context: str = "connection") -> dict:
-    """Resolve ${VAR} in ONE connection's subtree; unset vars fail loudly —
+    """Resolve ${VAR} in ONE connection's subtree; unset vars fail loudly, because
     silently substituting "" turns a missing password into a mystifying auth
     failure downstream."""
     missing: set[str] = set()
@@ -89,7 +89,7 @@ def connection(name: str) -> dict:
     conns = cfg.get("connections", {})
     if name not in conns:
         available = ", ".join(sorted(conns)) or "(none)"
-        where = f" in {path}" if path else " — no datadiffer.toml found; run `datadiffer init`"
+        where = f" in {path}" if path else " (no datadiffer.toml found; run `datadiffer init`)"
         raise DatadifferError(
             f"Unknown connection {name!r}{where}. Available: {available}"
         )
@@ -98,7 +98,7 @@ def connection(name: str) -> dict:
 
 def write_scaffold(path: Path) -> None:
     if path.exists():
-        raise DatadifferError(f"{path} already exists — not overwriting.")
+        raise DatadifferError(f"{path} already exists, not overwriting.")
     path.write_text(SCAFFOLD)
     os.chmod(path, 0o600)
 

@@ -113,7 +113,7 @@ def test_sf_projection_excludes_columns(seeded):
 
 def test_sf_decimal_fidelity(seeded, tmp_path):
     """A last-decimal NUMBER(18,4) change at 14 integer
-    digits must be flagged — float64 pulls silently missed it."""
+    digits must be flagged; float64 pulls silently missed them."""
     from datadiffer.connect.snowflake_ import _connect
 
     cur = _connect(_cfg()).cursor()

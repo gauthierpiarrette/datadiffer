@@ -26,7 +26,7 @@ def seeded_pg():
     con.execute("CALL postgres_execute('seed', "
                 "'CREATE TABLE orders_v2 (order_id int PRIMARY KEY, "
                 "amount double precision, country text)')")
-    # Out-of-band DDL: the extension caches schema info — refresh before using
+    # Out-of-band DDL: the extension caches schema info, so refresh before using
     # the catalog path for INSERTs.
     con.execute("CALL pg_clear_cache()")
     con.execute(

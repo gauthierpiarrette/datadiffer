@@ -18,7 +18,7 @@ Parquet, and CSV. BigQuery lands in v0.1.1.
 
 **Switch if** you want a maintained tool that explains *where* the change is
 concentrated, runs in CI with a real PR comment, exposes an MCP server for
-agents, and is tested on Python 3.10–3.13.
+agents, and is tested on Python 3.10 to 3.13.
 
 ## Command mapping
 

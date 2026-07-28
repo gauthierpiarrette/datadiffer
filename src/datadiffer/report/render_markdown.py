@@ -75,7 +75,7 @@ def _render(report, header, reproduce, policy_note, columns_cap, samples_cap, ma
             suffix = " (json)" if c.compared_as == "json_text" else ""
             out.append(f"| `{c.name}`{suffix} | {c.changed_rows:,} | {rate} |")
         if len(changed_cols) > columns_cap:
-            out.append(f"| …{len(changed_cols) - columns_cap} more | | |")
+            out.append(f"| ...{len(changed_cols) - columns_cap} more | | |")
 
     sd = report.schema_diff
     if not sd.identical:

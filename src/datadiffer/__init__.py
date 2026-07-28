@@ -1,4 +1,4 @@
-"""datadiffer — semantic table diffs with segment attribution.
+"""datadiffer: semantic table diffs with segment attribution.
 
 A maintained successor to data-diff. See https://github.com/gauthierpiarrette/datadiffer.
 """

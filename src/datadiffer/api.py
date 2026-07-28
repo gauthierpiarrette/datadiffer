@@ -52,7 +52,7 @@ def diff(
     watchdog: threading.Timer | None = None
     handles: list = []
     if timeout_seconds:
-        # DuckDB has no statement_timeout setting — a watchdog
+        # DuckDB has no statement_timeout setting, so a watchdog
         # thread interrupts the connection so the query is actually cancelled.
         watchdog = threading.Timer(timeout_seconds, con.interrupt)
         watchdog.daemon = True
@@ -66,7 +66,7 @@ def diff(
         schema_b = _side_schema(con, raw_b, "b")
         common = {c: t for c, t in schema_a.items() if c in schema_b}
         if not common:
-            raise DatadifferError("Tables share no columns — nothing to diff.")
+            raise DatadifferError("Tables share no columns. Nothing to diff.")
 
         # Column filters are validated against the ORIGINAL common set, before
         # projection removes excluded columns from pulled copies.
@@ -92,7 +92,7 @@ def diff(
             con, src_a.rel, src_b.rel, engine_common, keys,
             (src_a.stem, src_b.stem), where_sql, declared,
         )
-        # Guard against include/exclude leaving nothing to compare — checked
+        # Guard against include/exclude leaving nothing to compare, checked
         # against the ORIGINAL pre-pull common so pruning cannot mask it.
         if columns or exclude_columns:
             candidates = [c for c in common if c not in key_cols]
@@ -168,7 +168,7 @@ def _open_side(
 
             handle = SnowflakeHandle.open(conn, table, timeout_seconds)
             if handles is not None:
-                # Register for cleanup BEFORE guard() — any failure from here
+                # Register for cleanup BEFORE guard(): any failure from here
                 # on must not leak a live warehouse session.
                 handles.append(handle)
             warnings.extend(handle.guard())
@@ -191,7 +191,7 @@ def _open_side(
 
 
 def _mark_unsnapshotted(warnings: list[str]) -> None:
-    # The Postgres ATTACH path is unsnapshotted — the extension
+    # The Postgres ATTACH path is unsnapshotted: the extension
     # opens its own scan connections and every pass rescans the live table.
     if "unsnapshotted_multipass" not in warnings:
         warnings.append("unsnapshotted_multipass")
@@ -295,7 +295,7 @@ def _shared_declared_keys(con, src_a, src_b, warnings: list[str], raw_a=None, ra
     return [cols for cols in sets_a if cols in sets_b]
 
 
-# WHERE_ALLOWLIST_V1 — an exact, versioned contract.
+# WHERE_ALLOWLIST_V1 is an exact, versioned contract.
 # Additions require a version bump plus new fuzz cases. Enforced on the MCP
 # path (strict=True); the CLI keeps the parse/subquery/column gates only.
 WHERE_ALLOWLIST_V1_FUNCS = frozenset({
@@ -312,7 +312,7 @@ _ALLOWED_NODES = (
 
 def _validate_where(where: str, common: dict[str, str], strict: bool = False) -> str:
     """Single boolean expression; no statements, no subqueries; columns must
-    resolve on both sides. Returns the RE-RENDERED expression — literals are
+    resolve on both sides. Returns the RE-RENDERED expression; literals are
     re-emitted by sqlglot, which neutralizes smuggled text.
     ``strict`` additionally enforces WHERE_ALLOWLIST_V1 (the MCP gate)."""
     try:
@@ -345,7 +345,7 @@ _NONSCALAR_TYPES = (
 
 
 def _enforce_where_allowlist(cond: exp.Expression) -> None:
-    """WHERE_ALLOWLIST_V1. Node classes are checked first — several allowed
+    """WHERE_ALLOWLIST_V1. Node classes are checked first because several allowed
     operators (AND/OR/CAST/...) are also exp.Func subclasses in sqlglot, so
     the function check must run only on nodes NOT already allowed by class."""
     for node in cond.walk():

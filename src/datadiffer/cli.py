@@ -27,7 +27,7 @@ Examples:
   # Postgres (attached read-only)
   datadiffer diff orders orders_v2 --source "postgresql://user@host:5432/db"
 
-  # Snowflake (key-pair auth, via datadiffer.toml — run `datadiffer init`)
+  # Snowflake (key-pair auth, via datadiffer.toml; run `datadiffer init`)
   datadiffer diff wh::orders wh::orders_v2
 
   # explicit key, JSON report
@@ -38,7 +38,7 @@ Examples:
 @click.version_option(version=__version__, prog_name="datadiffer")
 @click.pass_context
 def main(ctx: click.Context) -> None:
-    """datadiffer — diff two tables and see which slice of your data changed."""
+    """datadiffer: diff two tables and see which slice of your data changed."""
     if ctx.invoked_subcommand is None:
         click.echo(ctx.get_help())
         click.echo()
@@ -243,7 +243,7 @@ def connections_test() -> None:
 def demo() -> None:
     """Generate seeded demo data and diff it (offline, no credentials).
 
-    Exits 0 even though a diff is found — it is a demonstration, not a gate
+    Exits 0 even though a diff is found, since it is a demonstration, not a gate
     (operational errors still exit 2).
     """
     import duckdb
@@ -256,7 +256,7 @@ def demo() -> None:
         a, b = demo_mod.generate()
     except (OSError, duckdb.Error) as e:
         click.echo(
-            f"error: cannot write ./{demo_mod.DEMO_DIR}/ here ({e}) — "
+            f"error: cannot write ./{demo_mod.DEMO_DIR}/ here ({e}). "
             "cd to a writable directory and retry.",
             err=True,
         )

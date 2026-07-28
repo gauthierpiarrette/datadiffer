@@ -17,14 +17,14 @@ from datadiffer.errors import DatadifferError
 
 ROW_HARD_CAP = 50_000_000
 ROW_WARN = 10_000_000
-BYTE_HARD_CAP = 10 * 1024**3  # 10 GiB/side — bytes, not rows, are the real limit
+BYTE_HARD_CAP = 10 * 1024**3  # 10 GiB/side; bytes, not rows, are the real limit
 
 _SECRET_PARAMS = re.compile(r"(?i)\b(password|sslpassword|sslkey)=[^&\s]*")
 _USERINFO = re.compile(r"(?i)(://)[^/@\s]+@")
 
 
 def redact(uri: str) -> str:
-    """Strip credentials for display — this string lands in reports and logs.
+    """Strip credentials for display; this string lands in reports and logs.
     Covers both userinfo (user:pass@) and libpq query params (?password=...)."""
     scheme, sep, rest = uri.partition("://")
     if sep and "@" in rest:
@@ -37,7 +37,7 @@ def redact(uri: str) -> str:
 
 def redact_text(text: str, uri: str | None = None) -> str:
     """Scrub credentials from arbitrary text (driver error messages embed the
-    raw DSN — the failed-connection path is where passwords leak)."""
+    raw DSN, since the failed-connection path is where passwords leak)."""
     if uri:
         text = text.replace(uri, redact(uri))
     text = _USERINFO.sub(r"\1", text)
@@ -51,7 +51,7 @@ def open_postgres(
     """ATTACH a Postgres database read-only and resolve <schema>.<table>."""
     if "://" in table_ref:
         raise DatadifferError(
-            f"{table_ref!r} looks like a connection URI — pass the URI via --source "
+            f"{table_ref!r} looks like a connection URI. Pass the URI via --source "
             "and a bare [schema.]table name as the locator."
         )
     if "::" in table_ref:
@@ -59,7 +59,7 @@ def open_postgres(
     parts = table_ref.split(".")
     if len(parts) > 2 or not all(parts):
         raise DatadifferError(
-            f"Bad table reference {table_ref!r} — use <table> or <schema>.<table>"
+            f"Bad table reference {table_ref!r}, use <table> or <schema>.<table>"
         )
     schema = parts[0] if len(parts) == 2 else "public"
     table = parts[-1]
@@ -83,7 +83,7 @@ def _pg_query(con: duckdb.DuckDBPyConnection, alias: str, pg_sql: str):
 
 
 def estimated_rows(con: duckdb.DuckDBPyConnection, src: LocalSource) -> int | None:
-    """Planner estimate from pg_class.reltuples — cheap, no table scan.
+    """Planner estimate from pg_class.reltuples, cheap and with no table scan.
     Returns None when unknown (reltuples is -1 on never-analyzed tables)."""
     q = (
         "SELECT reltuples::bigint FROM pg_class c "
@@ -119,7 +119,7 @@ def check_row_guard(con: duckdb.DuckDBPyConnection, src: LocalSource) -> list[st
         warnings.append(f"row_estimate_unavailable:{src.stem}")
     elif est > ROW_HARD_CAP:
         raise DatadifferError(
-            f"{src.display} has ~{est:,} rows — over the {ROW_HARD_CAP:,} cross-source cap. "
+            f"{src.display} has ~{est:,} rows, over the {ROW_HARD_CAP:,} cross-source cap. "
             "Narrow the diff with --where."
         )
     elif est > ROW_WARN:
@@ -130,7 +130,7 @@ def check_row_guard(con: duckdb.DuckDBPyConnection, src: LocalSource) -> list[st
         warnings.append(f"byte_estimate_unavailable:{src.stem}")
     elif size > BYTE_HARD_CAP:
         raise DatadifferError(
-            f"{src.display} is ~{size / 1024**3:.1f} GiB — over the "
+            f"{src.display} is ~{size / 1024**3:.1f} GiB, over the "
             f"{BYTE_HARD_CAP / 1024**3:.0f} GiB cross-source cap. "
             "Narrow the diff with --where or exclude wide columns."
         )
@@ -142,7 +142,7 @@ def declared_key_sets_pg(
 ) -> list[list[str]]:
     """Declared PRIMARY KEY / UNIQUE column sets via information_schema.
 
-    Casts to ::text — information_schema columns are domain types the DuckDB
+    Casts to ::text because information_schema columns are domain types the DuckDB
     postgres extension would otherwise degrade to VARCHAR blobs. Join carries
     table_name: Postgres constraint names are unique per table, not schema.
     """

@@ -1,9 +1,9 @@
-"""`datadiffer demo` — seeded fixtures with planted regressions, run offline.
+"""`datadiffer demo`: seeded fixtures with planted regressions, run offline.
 
 Generates two parquet files into ./datadiffer-demo/ and diffs them, printing
 the exact command it ran so the grammar is taught. Deterministic (pure
-arithmetic, no RNG). Planted story: an agent's refactor changed tax handling —
-amount shifts concentrated almost entirely in country='DE', a batch of new
+arithmetic, no RNG). Planted story: an agent's refactor changed tax handling, so
+amount shifts are concentrated almost entirely in country='DE', a batch of new
 orders arrived with plan=NULL, and a slice of old rows was dropped.
 """
 
