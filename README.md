@@ -5,7 +5,7 @@
 **Diff two tables. See what changed, and which slice of your data it's concentrated in.**
 
 ```
-98.6% of modified rows have country = 'DE' (8.9× over-represented)
+98.6% of modified rows have country = 'DE' (8.87x over-represented)
 ```
 
 [![PyPI](https://img.shields.io/pypi/v/datadiffer)](https://pypi.org/project/datadiffer/)
